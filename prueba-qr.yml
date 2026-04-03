@@ -1,0 +1,27 @@
+config:
+  # Ajusta esta URL con el puerto donde corre tu Node.js y la ruta base de tus accesos
+  target: "http://localhost:3001/api/accesos" 
+  phases:
+    # FASE 1: Calentamiento (Llegan 5 personas por segundo durante 10 segundos)
+    - duration: 10
+      arrivalRate: 5
+      name: "Calentamiento (Poco tráfico)"
+      
+    # FASE 2: Hora Pico (Llegan 25 personas por segundo durante 20 segundos)
+    - duration: 20
+      arrivalRate: 25
+      name: "Hora pico (Estrés máximo)"
+
+scenarios:
+  - name: "Registro Manual"
+    flow:
+      - post:
+          url: "/register"
+        # En prueba-qr.yml
+json:
+  "matricula_identificacion": "23002390" # Con comillas
+  "id_punto": 1
+  "exitoso": true
+  "tipo_acceso": "Entrada"
+  "tipo_validacion": "Manual"
+  "motivo_rechazo": "Prueba de carga"
