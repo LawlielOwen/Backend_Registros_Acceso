@@ -39,12 +39,11 @@ router.get("/count", async (req: Request, res: Response) => {
   try {
     const { fecha, id_punto, exitoso } = req.query;
     let query = `
-      SELECT 
-        COUNT(CASE WHEN tipo_acceso = 'Entrada' THEN 1 END) AS entradas,
-        COUNT(CASE WHEN tipo_acceso = 'Salida' THEN 1 END) AS salidas
-      FROM tbl_registros_acceso
-      WHERE 1=1
-    `;
+  SELECT 
+    COUNT(CASE WHEN tipo_acceso = 'Entrada' THEN 1 END) AS entradas,
+    COUNT(CASE WHEN tipo_acceso = 'Salida' THEN 1 END) AS salidas
+  FROM vista_registros_acceso
+  WHERE DATE(fecha_acceso) = CURDATE()`;
     const params: any[] = [];
     if (id_punto) {
       query += " AND id_punto = ?";

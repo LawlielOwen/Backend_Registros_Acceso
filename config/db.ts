@@ -16,8 +16,7 @@ const pool = mysql.createPool({
   // ==========================================
   // LA MAGIA PARA EL HORARIO:
   // ==========================================
-  timezone: '-06:00', // Obliga a MySQL a usar el horario local
-  dateStrings: true   // Evita que Node.js convierta las fechas a formato UTC
+    // Evita que Node.js convierta las fechas a formato UTC
 });
 
 export default pool;
