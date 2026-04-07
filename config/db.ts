@@ -9,10 +9,16 @@ const pool = mysql.createPool({
   password: process.env.DB_PASSWORD,
   database: process.env.DB_NAME,
   waitForConnections: true,
-  connectionLimit: 4, // <-- Bajamos el límite para que Clever Cloud no lo bloquee
+  connectionLimit: 4, // <-- Ideal para Clever Cloud
   ssl: {
-    rejectUnauthorized: false // <-- Permite la conexión segura entre Render y Clever Cloud
-  }
+    rejectUnauthorized: false // <-- Permite la conexión segura
+  },
+  // ==========================================
+  // LA MAGIA PARA EL HORARIO:
+  // ==========================================
+  timezone: '-06:00', // Obliga a MySQL a usar el horario local
+  dateStrings: true   // Evita que Node.js convierta las fechas a formato UTC
 });
 
 export default pool;
+ 
