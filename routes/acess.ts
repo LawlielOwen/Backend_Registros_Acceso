@@ -38,22 +38,27 @@ router.get("/", async (_req: Request, res: Response) => {
 router.get("/count", async (req: Request, res: Response) => {
   try {
     const { fecha, id_punto, exitoso } = req.query;
+
     let query = `
-  SELECT 
-    COUNT(CASE WHEN tipo_acceso = 'Entrada' THEN 1 END) AS entradas,
-    COUNT(CASE WHEN tipo_acceso = 'Salida' THEN 1 END) AS salidas
-  FROM vista_registros_acceso
-  WHERE DATE(fecha_acceso) = CURDATE()`;
+      SELECT 
+        COUNT(CASE WHEN tipo_acceso = 'Entrada' THEN 1 END) AS entradas,
+        COUNT(CASE WHEN tipo_acceso = 'Salida' THEN 1 END) AS salidas
+      FROM vista_registros_acceso
+      WHERE DATE(fecha_acceso) = DATE(DATE_SUB(NOW(), INTERVAL 8 HOUR))`; 
+      
     const params: any[] = [];
+    
     if (id_punto) {
       query += " AND id_punto = ?";
       params.push(Number(id_punto));
     }
+    
     if (fecha) {
       query += " AND DATE(fecha_acceso) = ?";
       params.push(fecha);
     } else {
-      query += " AND DATE(fecha_acceso) = CURDATE()";
+      // CORRECCIÓN 2: Y también ajustarlo en el bloque else
+      query += " AND DATE(fecha_acceso) = DATE(DATE_SUB(NOW(), INTERVAL 8 HOUR))";
     }
 
     if (exitoso !== undefined) {

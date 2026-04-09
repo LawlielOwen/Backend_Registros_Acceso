@@ -9,15 +9,20 @@ const pool = mysql.createPool({
   password: process.env.DB_PASSWORD,
   database: process.env.DB_NAME,
   waitForConnections: true,
-  connectionLimit: 4, // <-- Ideal para Clever Cloud
+  connectionLimit: 4, 
   ssl: {
-    rejectUnauthorized: false // <-- Permite la conexión segura
+    rejectUnauthorized: false 
   },
-  // ==========================================
-  // LA MAGIA PARA EL HORARIO:
-  // ==========================================
-    // Evita que Node.js convierta las fechas a formato UTC
+ 
+  timezone: '-06:00',
+
+});
+
+pool.on('connection', (connection) => {
+
+  connection.query("SET time_zone = '-06:00';").catch(err => {
+    console.error("Error configurando la zona horaria en la conexión:", err);
+  });
 });
 
 export default pool;
- 
