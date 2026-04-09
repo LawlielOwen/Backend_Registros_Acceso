@@ -183,3 +183,18 @@ router.get("/points", async (_req: Request, res: Response) => {
     res.status(500).json({ message: "Error fetching access records" });
   }
 });
+router.get("/detail/:id", async (req: Request, res: Response) => {
+  try {
+    const { id } = req.params;
+    const [rows] = await pool.query<any[]>("CALL sp_obtener_detalle_acceso(?)", [Number(id)]);
+    const result = (rows as any[])[0];
+    if (!result || result.length === 0) {
+      return res.status(404).json({ message: "Registro no encontrado" });
+    }
+    res.json(result[0]);
+
+  } catch (error) {
+    console.error("Error al obtener detalle del acceso:", error);
+    res.status(500).json({ message: "Error interno al obtener el detalle" });
+  }
+});
