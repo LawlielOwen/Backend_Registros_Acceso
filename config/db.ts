@@ -13,16 +13,17 @@ const pool = mysql.createPool({
   ssl: {
     rejectUnauthorized: false 
   },
- 
   timezone: '-06:00',
-
 });
 
-pool.on('connection', (connection) => {
-
-  connection.query("SET time_zone = '-06:00';").catch(err => {
+// Interceptar cada nueva conexión
+pool.on('connection', async (connection) => {
+  // Altera la zona horaria de la sesión usando async/await
+  try {
+    await connection.query("SET time_zone = '-06:00';");
+  } catch (err) {
     console.error("Error configurando la zona horaria en la conexión:", err);
-  });
+  }
 });
 
 export default pool;
